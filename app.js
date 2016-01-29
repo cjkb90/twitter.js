@@ -1,5 +1,11 @@
 var express = require('express');
 var app = express();
+var swig = require('swig');
+app.engine('html',swig.renderFile);
+app.set('view engine','html')
+app.set('views',__dirname+'/views')
+swig.setDefaults({cache:false});
+
 
 app.use(function(req,res,next){	
 	console.log(req.method+" "+req.url+" "+res.statusCode);
@@ -12,8 +18,7 @@ app.use('/special',function(req,res,next){
 });
 
 app.get('/',function(req, res){
-	
-	res.send("<h2>Welcome all yee</h2>");
+	res.render('index',locals)
 });
 
 app.get('/news',function(req, res){
@@ -23,3 +28,13 @@ app.get('/news',function(req, res){
 app.listen(3000, function(){
 	console.log("server listening");
 });
+
+
+var locals = {
+	title: "My Big Title",
+	people : [
+	{name: "Gandalf"},
+	{name: "Frodo"},
+	{name: "Hermione"}
+	]
+};
